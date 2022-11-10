@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Editor</title>
+  <link href="https://cdn.bootcdn.net/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet">
+  <!-- <link href="https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet"> -->
+  <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet">
+  <link href="./css/layout.css" rel="stylesheet">
+  <link href="./css/view.css" rel="stylesheet">
+
+  <script src="./js/custom-elem.js"></script>
+</head>
+
+<body>
+  <demo-nav title="HTML Editor"></demo-nav>
+  <div class="page-container">
+    <div class="page-left">
+      <demo-menu></demo-menu>
+    </div>
+    <div class="page-right">
+      <textarea id="editor-content-textarea" style="width: 100%; height: 100px; outline: none;"></textarea>
+      <div style="margin-top: 10px;">
+        <button id="btn-set-html">转换</button>
+      </div>
+
+      <!-- 编辑器 DOM -->
+      <div style="border: 1px solid #ccc; margin-top: 20px;">
+        <div id="editor-toolbar" style="border-bottom: 1px solid #ccc;"></div>
+        <div id="editor-text-area" style="height: 350px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/index.min.js"></script> -->
+  <script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>
+  <script>
+    const E = window.wangEditor
+
+    // 切换语言
+    const LANG = location.href.indexOf('lang=en') > 0 ? 'en' : 'zh-CN'
+    E.i18nChangeLanguage(LANG)
+
+    window.editor = E.createEditor({
+      selector: '#editor-text-area',
+      html: '<h1>https://lagqwq.github.io/</h1>',
+      config: {
+        placeholder: 'Type here...',
+        MENU_CONF: {
+          uploadImage: {
+            fieldName: 'your-fileName',
+            base64LimitSize: 10 * 1024 * 1024 // 10M 以下插入 base64
+          }
+        },
+        onChange(editor) {
+          const html = editor.getHtml()
+          console.log(html)
+        }
+      }
+    })
+
+    window.toolbar = E.createToolbar({
+      editor,
+      selector: '#editor-toolbar',
+      config: {}
+    })
+
+    // textarea 初始化值
+    const textarea = document.getElementById('editor-content-textarea')
+    textarea.value = '<h1>https://lagqwq.github.io/</h1>'
+
+    // Set HTML
+    document.getElementById('btn-set-html').addEventListener('click', () => {
+      editor.setHtml(textarea.value)
+    })
+  </script>
+</body>
+
+</html>
